@@ -1,14 +1,109 @@
-<html>
+<!DOCTYPE html>
+<html lang="es">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iniciar sesión</title>
+  <style>
+    :root { --bg:#0f172a; --card:#111827; --muted:#9ca3af; --txt:#e5e7eb; --accent:#22c55e; }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100svh; display:grid; place-items:center;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
+      background:linear-gradient(135deg,#0f172a,#111827); color:var(--txt);
+    }
+    .card{
+      width:100%; max-width:380px; padding:28px; border-radius:18px;
+      background:rgba(17,24,39,.85); backdrop-filter:blur(6px);
+      border:1px solid rgba(255,255,255,.08); box-shadow:0 10px 35px rgba(0,0,0,.35);
+    }
+    h1{margin:0 0 18px; font-size:1.4rem}
+    .field{margin-bottom:14px}
+    label{display:block; margin-bottom:6px; font-size:.9rem; color:var(--muted)}
+    input[type="text"],input[type="password"],input[type="email"]{
+      width:100%; padding:12px 14px; border-radius:12px; outline:none;
+      border:1px solid rgba(255,255,255,.12); background:#0b1220; color:var(--txt);
+      transition:border .15s, box-shadow .15s;
+    }
+    input::placeholder{color:#64748b}
+    input:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(34,197,94,.2)}
+    .row{display:flex; align-items:center; justify-content:space-between; gap:10px; margin:10px 0 18px}
+    .row .remember{display:flex; align-items:center; gap:8px; font-size:.9rem; color:var(--muted)}
+    .row a{color:var(--accent); text-decoration:none; font-size:.9rem}
+    .row a:hover{text-decoration:underline}
+    .password-wrap{position:relative}
+    .toggle{
+      position:absolute; right:10px; top:50%; transform:translateY(-50%);
+      border:0; background:transparent; color:#cbd5e1; cursor:pointer; padding:6px;
+    }
+    button[type="submit"]{
+      width:100%; padding:12px 14px; border-radius:12px; border:0;
+      background:var(--accent); color:#04210f; font-weight:600; cursor:pointer;
+      transition:transform .06s, filter .2s;
+    }
+    button[type="submit"]:hover{filter:brightness(1.05)}
+    button[type="submit"]:active{transform:translateY(1px)}
+    .hint{margin-top:12px; font-size:.85rem; color:var(--muted); text-align:center}
+    .error{display:none; margin-bottom:12px; padding:10px; border-radius:10px;
+      background:#1f2937; color:#fecaca; border:1px solid #b91c1c}
+  </style>
 </head>
 <body>
-  <h5>Bienvenido Ana, Hola mundo</h5> 
-  <button>
-    Guardar
-  </button>
-</body>
-  <footer>
-    <h6>Todos los derechos reservados</h6>
-  </footer>
+  <form class="card" id="login" novalidate>
+    <h1>Iniciar sesión</h1>
 
+    <div class="error" id="err" role="alert" aria-live="polite"></div>
+
+    <div class="field">
+      <label for="email">Correo o usuario</label>
+      <input id="email" name="email" type="text" autocomplete="username" placeholder="tu@correo.com" required />
+    </div>
+
+    <div class="field password-wrap">
+      <label for="password">Contraseña</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" placeholder="********" required minlength="6" />
+      <button class="toggle" type="button" aria-label="Mostrar u ocultar contraseña" id="togglePwd">👁️</button>
+    </div>
+
+    <div class="row">
+      <label class="remember"><input type="checkbox" id="remember" /> Recuérdame</label>
+      <a href="#">¿Olvidaste tu contraseña?</a>
+    </div>
+
+    <button type="submit">Entrar</button>
+    <p class="hint">¿No tienes cuenta? <a href="#">Crear cuenta</a></p>
+  </form>
+
+  <script>
+    // Mostrar/ocultar contraseña
+    document.getElementById('togglePwd').addEventListener('click', function () {
+      const input = document.getElementById('password');
+      input.type = input.type === 'password' ? 'text' : 'password';
+      this.textContent = input.type === 'password' ? '👁️' : '🙈';
+    });
+
+    // Validación simple de ejemplo
+    document.getElementById('login').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const pwd = document.getElementById('password').value.trim();
+      const err = document.getElementById('err');
+
+      if (!email || !pwd) {
+        err.style.display = 'block';
+        err.textContent = 'Completa correo/usuario y contraseña.';
+        return;
+      }
+      if (pwd.length < 6) {
+        err.style.display = 'block';
+        err.textContent = 'La contraseña debe tener al menos 6 caracteres.';
+        return;
+      }
+      err.style.display = 'none';
+      // Aquí iría tu POST real al servidor (fetch)
+      alert('Login correcto (demo)');
+      this.reset();
+    });
+  </script>
+</body>
 </html>
